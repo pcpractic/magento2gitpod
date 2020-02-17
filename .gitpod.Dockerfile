@@ -81,11 +81,6 @@ RUN sudo apt-get update \
  && sudo apt-get install -y \
   redis-server \
  && sudo rm -rf /var/lib/apt/lists/*
- 
- #n98-magerun2 tool.
- RUN wget https://files.magerun.net/n98-magerun2.phar --no-check-certificate \
-     && chmod +x ./n98-magerun2.phar \
-     && mv ./n98-magerun2.phar /usr/local/bin/n98-magerun2
      
 #Install APCU
 RUN echo "apc.enable_cli=1" > /etc/php/7.2/cli/conf.d/20-apcu.ini
