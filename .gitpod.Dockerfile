@@ -74,66 +74,7 @@ USER gitpod
 RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
 COPY nginx.conf /etc/nginx
 
-#Selenium required for MTF
-RUN wget -c https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-RUN wget -c https://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-
 USER root
-
-# Install Chrome
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
-
-ENV BLACKFIRE_LOG_LEVEL 1
-ENV BLACKFIRE_LOG_FILE /var/log/blackfire/blackfire.log
-ENV BLACKFIRE_SOCKET unix:///tmp/agent.sock
-ENV BLACKFIRE_SOURCEDIR /etc/blackfire
-ENV BLACKFIRE_USER gitpod
-
-RUN curl -sS https://packagecloud.io/gpg.key | sudo apt-key add \
-    && curl -sS https://packages.blackfire.io/gpg.key | sudo apt-key add \
-    && echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-get update \
-    && apt-get install -y blackfire-agent \
-    && apt-get install -y blackfire-php
-
-RUN \
-    version=$(php -r "echo PHP_MAJOR_VERSION, PHP_MINOR_VERSION;") \
-    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/${version} \
-    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
-    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
-
-COPY blackfire-agent.ini /etc/blackfire/agent
-COPY blackfire-php.ini /etc/php/7.2/fpm/conf.d/92-blackfire-config.ini
-COPY blackfire-php.ini /etc/php/7.2/cli/conf.d/92-blackfire-config.ini
-
-COPY blackfire-run.sh /blackfire-run.sh
-
-ENTRYPOINT ["/bin/bash", "/blackfire-run.sh"]
-
-#Install Tideways
-RUN apt-get update
-RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list && \
-    curl -sS 'https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg' | apt-key add -
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -yq tideways-daemon && \
-    apt-get autoremove --assume-yes && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    
-ENTRYPOINT ["tideways-daemon","--hostname=tideways-daemon","--address=0.0.0.0:9135"]
-
-RUN echo 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main' > /etc/apt/sources.list.d/tideways.list && \
-    curl -sS 'https://s3-eu-west-1.amazonaws.com/tideways/packages/EEB5E8F4.gpg' | apt-key add - && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq install tideways-php && \
-    apt-get autoremove --assume-yes && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/cli/conf.d/40-tideways.ini
-RUN echo 'extension=tideways.so\ntideways.connection=tcp://0.0.0.0:9135\ntideways.api_key=${TIDEWAYS_APIKEY}\n' > /etc/php/7.2/fpm/conf.d/40-tideways.ini
-RUN rm -f /etc/php/7.2/cli/20-tideways.ini
 
 # Install Redis.
 RUN sudo apt-get update \
@@ -152,36 +93,13 @@ RUN echo "priority=25" > /etc/php/7.2/cli/conf.d/25-apcu_bc.ini
 RUN echo "extension=apcu.so" >> /etc/php/7.2/cli/conf.d/25-apcu_bc.ini
 RUN echo "extension=apc.so" >> /etc/php/7.2/cli/conf.d/25-apcu_bc.ini
 
-RUN chown -R gitpod:gitpod /var/log/blackfire
-RUN chown -R gitpod:gitpod /etc/init.d/blackfire-agent
-RUN mkdir -p /var/run/blackfire
-RUN chown -R gitpod:gitpod /var/run/blackfire
-RUN chown -R gitpod:gitpod /etc/blackfire
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/nginx
 RUN chown -R gitpod:gitpod /home/gitpod/.composer
 RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
-
-#New Relic
-RUN curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-9.4.1.250-linux.tar.gz | tar -C /tmp -zx && \
-   export NR_INSTALL_USE_CP_NOT_LN=1 && \
-    export NR_INSTALL_SILENT=1 && \
-     /tmp/newrelic-php5-*/newrelic-install install && \
-      rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
-        sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
-     -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-         /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-        sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"ba052d5cdafbbce81ed22048d8a004dd285aNRAL"/' \
-     -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "magento2gitpod"/' \
-     /etc/php/7.2/cli/conf.d/newrelic.ini && \
-     
-     sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/fpm/conf.d/newrelic.ini && \
-     sed -i 's|/var/log/newrelic/|/tmp/|g' /etc/php/7.2/cli/conf.d/newrelic.ini
      
 RUN chown -R gitpod:gitpod /etc/php
-RUN chown -R gitpod:gitpod /etc/newrelic
-COPY newrelic.cfg /etc/newrelic
 
 USER gitpod
 
