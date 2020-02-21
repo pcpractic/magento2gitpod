@@ -63,12 +63,3 @@ RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
-
-USER gitpod
-
-#RUN bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-#    && sdk default java 11.0.5-open"
-    
-RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.16.tar.gz --output elasticsearch-5.6.16.tar.gz \
-    && tar -xzf elasticsearch-5.6.16.tar.gz
-ENV ES_HOME="$HOME/elasticsearch-5.6.16"
