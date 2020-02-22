@@ -16,6 +16,7 @@ RUN apt install software-properties-common
 RUN apt-get -y install gcc make autoconf libc-dev pkg-config
 RUN apt-get -y install php7.2-dev
 RUN apt-get -y install libmcrypt-dev
+RUN apt-get install -y mysql-client
 
 #Install php-fpm7.2
 RUN apt-get update \
