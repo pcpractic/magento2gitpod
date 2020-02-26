@@ -66,9 +66,9 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
 
-RUN \
-    apt-get update && \
-    apt-get -y install apt-transport-https curl telnet wget && \
-    curl https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash && \
-    apt-get -y install varnish
+RUN wget https://packagecloud.io/varnishcache/varnish5/gpgkey -O - | sudo apt-key add -
+RUN sudo apt-get install apt-transport-https debian-archive-keyring -y
+RUN echo "deb https://packagecloud.io/varnishcache/varnish5/debian/ stretch main" | sudo tee -a /etc/apt/sources.list.d/varnishcache_varnish5.list
+RUN echo "deb-src https://packagecloud.io/varnishcache/varnish5/debian/ stretch main" | sudo tee -a /etc/apt/sources.list.d/varnishcache_varnish5.list
+RUN apt-get update && apt-get install varnish -y
 RUN chown -R gitpod:gitpod /etc/varnish
