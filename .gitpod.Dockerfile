@@ -66,7 +66,5 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
 
-RUN add-apt-repository -y ppa:cartodb/varnish
-RUN apt-get update
-RUN apt-get install varnish -y
+RUN add-apt-repository -y ppa:fgsch/varnish-5.0 && apt-get update && apt-get install varnish -y
 RUN chown -R gitpod:gitpod /etc/varnish
