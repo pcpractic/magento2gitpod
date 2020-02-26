@@ -67,4 +67,4 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
 RUN chown -R gitpod:gitpod /etc/php
 
 FROM emgag/varnish:5.2.1
-COPY default.vcl /etc/varnish/default.vcl
+RUN chown -R gitpod:gitpod /etc/varnish
