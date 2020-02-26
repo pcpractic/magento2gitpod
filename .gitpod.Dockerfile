@@ -66,6 +66,6 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
 
-RUN wget --content-disposition https://packagecloud.io/varnishcache/varnish5/packages/ubuntu/trusty/varnish_5.2.1-1~trusty_amd64.deb/download.deb && dpkg -i download.deb
+RUN wget --content-disposition https://packagecloud.io/varnishcache/varnish5/packages/ubuntu/trusty/varnish_5.2.1-1~trusty_amd64.deb/download.deb && dpkg -i varnish_5.2.1-1~trusty_amd64.deb
 RUN apt-get -y install varnish=5.2.1-1~trusty
 RUN chown -R gitpod:gitpod /etc/varnish
