@@ -138,6 +138,7 @@ RUN cd /usr/local/src/ && \
     ldconfig
 
 RUN mkdir /etc/varnish
+RUN chown -R gitpod:gitpod /usr/local/var/varnish/
 
 #Install php-fpm7.2
 RUN apt-get update \
