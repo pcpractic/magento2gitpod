@@ -66,6 +66,7 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
 
-RUN curl -s https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash
-RUN apt-get update && apt-get -y install varnish=5.2.1-1~trusty
+RUN add-apt-repository ppa:cartodb/varnish
+RUN apt-get update
+RUN apt-get install varnish -y
 RUN chown -R gitpod:gitpod /etc/varnish
