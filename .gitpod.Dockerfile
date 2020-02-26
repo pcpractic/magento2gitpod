@@ -19,6 +19,12 @@ RUN apt-get -y install libmcrypt-dev
 RUN apt-get -y install redis-tools
 RUN apt-get install -y mysql-client
 
+#Install Varnish
+RUN apt-get update \
+    && add-apt-repository -y ppa:fgsch/varnish-5.0 \
+    && apt-get update \
+    && apt-get install varnish -y
+
 #Install php-fpm7.2
 RUN apt-get update \
     && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
@@ -65,6 +71,4 @@ RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
-
-RUN add-apt-repository -y ppa:fgsch/varnish-5.0 && apt-get update && apt-get install varnish -y
 RUN chown -R gitpod:gitpod /etc/varnish
