@@ -71,3 +71,4 @@ RUN \
     apt-get -y install apt-transport-https curl telnet wget && \
     curl https://packagecloud.io/install/repositories/varnishcache/varnish5/script.deb.sh | bash && \
     apt-get -y install varnish
+RUN chown -R gitpod:gitpod /etc/varnish
