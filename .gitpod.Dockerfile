@@ -23,6 +23,8 @@ RUN apt-get install -y mysql-client
 RUN apt-get update \
     && wget -c http://launchpadlibrarian.net/376309450/varnish_5.2.1-1build2_amd64.deb \
     && dpkg -i varnish_5.2.1-1build2_amd64.deb \
+    && apt-get update \
+    && apt-get install libvarnishapi1 -y \
     && apt-get install varnish -y
 
 #Install php-fpm7.2
