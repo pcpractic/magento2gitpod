@@ -19,35 +19,6 @@ RUN apt-get -y install libmcrypt-dev
 RUN apt-get -y install redis-tools
 RUN apt-get install -y mysql-client
 
-#
-# enable contrib repo
-#
-RUN sed -i 's/main/main contrib/g' /etc/apt/sources.list
-
-#
-# install varnish build deps
-#
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    automake \
-    autotools-dev \
-    build-essential \
-    ca-certificates \
-    curl \
-    git \
-    libedit-dev \
-    libgeoip-dev \
-    libjemalloc-dev \
-    libmhash-dev \
-    libncurses-dev \
-    libpcre3-dev \
-    libtool \
-    pkg-config \
-    python-docutils \
-    python-sphinx \
-    && apt-get clean \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN apt-get update \
     && apt-get install -y debian-archive-keyring \
     && apt-get install -y curl gnupg apt-transport-https \
