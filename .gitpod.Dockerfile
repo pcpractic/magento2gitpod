@@ -180,3 +180,4 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
 RUN chown -R gitpod:gitpod /etc/php
 RUN mkdir -p /etc/varnish
 RUN chown -R gitpod:gitpod /etc/varnish
+RUN chown -R gitpod:gitpod /usr/local/var/varnish/
