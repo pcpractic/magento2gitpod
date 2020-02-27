@@ -1,0 +1,1 @@
+varnishd -F -T :6082 -t 120 -f /etc/varnish/default.vcl -s malloc,512m -p pipe_timeout=7200 -p default_ttl=3600 -p thread_pool_max=1000 -p cli_buffer=32k -p default_grace=3600 -p vcc_allow_inline_c=on -p thread_pool_min=50 -p workspace_client=512k -p thread_pool_timeout=120 -p http_resp_hdr_len=32k -p feature=+esi_ignore_other_elements &
