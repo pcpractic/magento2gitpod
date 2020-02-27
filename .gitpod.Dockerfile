@@ -52,8 +52,8 @@ RUN apt-get update \
     && apt-get install -y debian-archive-keyring \
     && apt-get install -y curl gnupg apt-transport-https \
     && curl -L https://packagecloud.io/varnishcache/varnish41/gpgkey | sudo apt-key add - \
-    && echo "deb https://packagecloud.io/varnishcache/varnish41/ubuntu/ bionic main" > /etc/apt/sources.list.d/varnishcache_varnish41.list \
-    && echo "deb-src https://packagecloud.io/varnishcache/varnish41/ubuntu/ bionic main" >> /etc/apt/sources.list.d/varnishcache_varnish41.list \
+    && echo "deb https://packagecloud.io/varnishcache/varnish41/ubuntu/ trusty main" > /etc/apt/sources.list.d/varnishcache_varnish41.list \
+    && echo "deb-src https://packagecloud.io/varnishcache/varnish41/ubuntu/ trusty main" >> /etc/apt/sources.list.d/varnishcache_varnish41.list \
     && apt-get update \
     && apt-get install -y varnish
 
