@@ -55,7 +55,7 @@ RUN apt-get update \
     && echo "deb https://packagecloud.io/varnishcache/varnish41/ubuntu/ trusty main" > /etc/apt/sources.list.d/varnishcache_varnish41.list \
     && echo "deb-src https://packagecloud.io/varnishcache/varnish41/ubuntu/ trusty main" >> /etc/apt/sources.list.d/varnishcache_varnish41.list \
     && apt-get update \
-    && apt-get install -y varnish
+    && apt-get install -y varnish=4.1.11-1~trusty
 
 #Install php-fpm7.2
 RUN apt-get update \
