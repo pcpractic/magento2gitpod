@@ -178,4 +178,5 @@ RUN chown -R gitpod:gitpod /etc/init.d/
 RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
+RUN mkdir -p /etc/varnish
 RUN chown -R gitpod:gitpod /etc/varnish
