@@ -57,9 +57,6 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y varnish
 
-RUN mkdir /etc/varnish
-RUN chown -R gitpod:gitpod /usr/local/var/varnish/
-
 #Install php-fpm7.2
 RUN apt-get update \
     && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
@@ -107,3 +104,4 @@ RUN echo "net.core.somaxconn=65536" >> /etc/sysctl.conf
      
 RUN chown -R gitpod:gitpod /etc/php
 RUN chown -R gitpod:gitpod /etc/varnish
+RUN chown -R gitpod:gitpod /usr/local/var/varnish/
