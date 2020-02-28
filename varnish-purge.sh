@@ -1,1 +1,0 @@
-varnishadm "ban req.url ~ /"
